@@ -2,23 +2,21 @@ from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 import unittest
 
-browser = webdriver.Firefox()
-
 class NewVisitorTesT(unittest.TestCase):
 
     def setUp(self):
         self.browser = webdriver.Firefox()
+        self.browser.implicitly_wait(3)
 
     def tearDown(self):
         self.browser.quit()
 
     def test_can_start_a_list_and_retrieve_it_later(self):
         # 사용자는 To-Do 웹 사이트에 방문한다.
-        browser.get("http://localhost:8000")
-        self.browser.implicitly_wait(3)
+        self.browser.get("http://localhost:8000")
 
         # To-Do 웹 사이트의 타이틀 헤더엔 "To-Do" 가 포함 되어 있다.
-        self.assertIn("To-Do", browser.title)
+        self.assertIn("To-Do", self.browser.title)
         header_text = self.browser.find_element("css selector", "h1").text
         self.assertIn("To-Do Lists", header_text)
  
