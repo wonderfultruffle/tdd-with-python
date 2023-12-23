@@ -30,9 +30,9 @@ class NewVisitorTesT(unittest.TestCase):
         # 엔터키를 치면 페이지가 갱신되고 작업 목록에 '1: 공작 깃털 사기' 아이템이 추가된다.
         input_box.send_keys(Keys.ENTER)
         
-        table = self.browser.find_element(value="id_item_list")
+        table = self.browser.find_element(value="id_list_table")
         rows = table.find_elements("css selector", "tr")
-        self.assertTrue(any(row.text == "1: 공작 깃털 사기" for row in rows))
+        self.assertTrue(any(row.text == "1: 공작 깃털 사기" for row in rows), "신규 작업이 테이블에 추가되지 않음.")
         
         # 추가 아이템을 입력할 수 있는 여분의 텍스트 상자가 존재한다.
         # 이번엔 "공작 깃털을 이용해 그물 만들기"라고 텍스트 상자에 입력하고 엔터키를 친다.
