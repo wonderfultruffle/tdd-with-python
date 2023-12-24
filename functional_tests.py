@@ -19,7 +19,7 @@ class NewVisitorTesT(unittest.TestCase):
 
         # To-Do 웹 사이트의 타이틀 헤더엔 "To-Do" 가 포함 되어 있다.
         self.assertIn("To-Do", self.browser.title)
-        header_text = self.browser.find_element("css selector", "h1").text
+        header_text = self.browser.find_element("tag name", "h1").text
         self.assertIn("To-Do Lists", header_text)
  
         # 사용자는 작업을 추가하기로 한다.
@@ -31,10 +31,10 @@ class NewVisitorTesT(unittest.TestCase):
         
         # 엔터키를 치면 페이지가 갱신되고 작업 목록에 '1: 공작 깃털 사기' 아이템이 추가된다.
         input_box.send_keys(Keys.ENTER)
-        self.browser.implicitly_wait(2)
+        self.browser.implicitly_wait(1)
         
         table = self.browser.find_element(value="id_list_table")
-        rows = table.find_elements("css selector", "tr")
+        rows = table.find_elements("tag name", "tr")
         self.assertTrue(any(row.text == "1: 공작 깃털 사기" for row in rows), "신규 작업이 테이블에 추가되지 않음.")
         
         # 추가 아이템을 입력할 수 있는 여분의 텍스트 상자가 존재한다.
