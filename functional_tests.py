@@ -13,7 +13,7 @@ class NewVisitorTesT(unittest.TestCase):
     def tearDown(self):
         self.browser.quit()
 
-    def test_can_start_a_list_and_retrieve_it_later(self):
+    def test_can_start_a_todo_list(self):
         # 사용자는 To-Do 웹 사이트에 방문한다.
         self.browser.get("http://localhost:8000")
 
