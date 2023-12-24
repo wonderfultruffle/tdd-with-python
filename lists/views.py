@@ -1,13 +1,15 @@
 from django.http import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 
 from lists.models import Item
 
 # Create your views here.
 def home_page(request):
-    item = Item()
-    item.text = request.POST.get("item_text", '')
-    item.save()
+    if request.method == "POST":
+        item = Item()
+        item.text = request.POST["item_text"]
+        item.save()
+        return redirect('/')
 
     # 책 방식: Get 과 POST를 모두 공통으로 처리
     return render(request, "lists/home.html", {"new_item_text": request.POST.get("item_text", '')})

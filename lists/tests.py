@@ -38,9 +38,17 @@ class HomePageTest(TestCase):
         new_item = Item.objects.first()
         self.assertEqual(new_item.text, "신규 작업 아이템")
 
-        self.assertContains(response, "신규 작업 아이템")
-        self.assertTemplateUsed(response, "lists/home.html")
+        # self.assertContains(response, "신규 작업 아이템")
+        # self.assertTemplateUsed(response, "lists/home.html") # 'POST 요청을 처리한 후에는 반드시 Redirect 하라.' -> 아래 Code로 대체
 
+        # self.assertEqual(response.status_code, 302)
+        # self.assertEqual(response["location"], '/')
+        self.assertRedirects(response, '/') # 위 두줄을 현재 줄로 대체.(Django 최신 버전 기능)
+
+    def test_home_page_only_saves_items_when_it_necessary(self):
+        response = self.client.get("/")
+
+        self.assertEqual(Item.objects.count(), 0)
 
 class ItemModelTesT(TestCase):
 
