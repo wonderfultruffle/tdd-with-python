@@ -38,6 +38,8 @@ class HomePageTest(TestCase):
         new_item = Item.objects.first()
         self.assertEqual(new_item.text, "신규 작업 아이템")
 
+    def test_home_page_redirects_after_POST(self):
+        response = self.client.post('/', data={"item_text":"신규 작업 아이템"})
         # self.assertContains(response, "신규 작업 아이템")
         # self.assertTemplateUsed(response, "lists/home.html") # 'POST 요청을 처리한 후에는 반드시 Redirect 하라.' -> 아래 Code로 대체
 
@@ -49,6 +51,16 @@ class HomePageTest(TestCase):
         response = self.client.get("/")
 
         self.assertEqual(Item.objects.count(), 0)
+
+    def test_home_page_display_all_list_items(self):
+        Item.objects.create(text="신규 작업 목록 1")
+        Item.objects.create(text="신규 작업 목록 2")
+
+        response = self.client.get('/')
+
+        for item in Item.objects.all():
+            self.assertContains(response, item.text)
+
 
 class ItemModelTesT(TestCase):
 

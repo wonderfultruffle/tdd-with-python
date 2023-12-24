@@ -6,15 +6,8 @@ from lists.models import Item
 # Create your views here.
 def home_page(request):
     if request.method == "POST":
-        item = Item()
-        item.text = request.POST["item_text"]
-        item.save()
+        item = Item.objects.create(text=request.POST["item_text"])
         return redirect('/')
 
-    # 책 방식: Get 과 POST를 모두 공통으로 처리
-    return render(request, "lists/home.html", {"new_item_text": request.POST.get("item_text", '')})
-    
-    # 내 방식: request가 Get 일 때와 POST일 때를 나누어 처리
-    # if request.method == "POST":
-    #     return render(request, "lists/home.html", {"new_item_text": request.POST["item_text"]})
-    # return render(request, "lists/home.html")
+    items = Item.objects.all()
+    return render(request, "lists/home.html", {"items": items})

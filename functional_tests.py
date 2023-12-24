@@ -35,8 +35,7 @@ class NewVisitorTesT(unittest.TestCase):
         input_box.send_keys("공작 깃털 사기")
         # 엔터키를 치면 페이지가 갱신되고 작업 목록에 '1: 공작 깃털 사기' 아이템이 추가된다.
         input_box.send_keys(Keys.ENTER)
-        self.browser.implicitly_wait(1)
-
+        time.sleep(1)
         self.check_for_row_in_list_table("1: 공작 깃털 사기")
         
         # 추가 아이템을 입력할 수 있는 여분의 텍스트 상자가 존재한다.
@@ -44,7 +43,8 @@ class NewVisitorTesT(unittest.TestCase):
         # 이번엔 "공작 깃털을 이용해 그물 만들기"라고 텍스트 상자에 입력하고 엔터키를 친다.
         input_box.send_keys("공작 깃털을 이용해 그물 만들기")
         input_box.send_keys(Keys.ENTER)
-        self.browser.implicitly_wait(1)
+        time.sleep(1)
+        # self.browser.implicitly_wait(5)
 
         # 페이지는 다시 갱신되고 두 개의 작업 목록이 존재한다.
         self.check_for_row_in_list_table("1: 공작 깃털 사기")
