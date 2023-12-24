@@ -29,3 +29,7 @@ class HomePageTest(TestCase):
     def test_home_page_returns_correct_html(self): # substitute for 'test_home_page_returns_correct_html_ole()'
         response = self.client.get("/")
         self.assertTemplateUsed(response, "lists/home.html")
+
+    def test_home_page_can_save_a_POST_request(self):
+        response = self.client.post("/", data={"item_text": "신규 작업 아이템"})
+        self.assertContains(response, "신규 작업 아이템")
