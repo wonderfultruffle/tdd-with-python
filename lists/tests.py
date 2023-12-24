@@ -33,7 +33,13 @@ class HomePageTest(TestCase):
 
     def test_home_page_can_save_a_POST_request(self):
         response = self.client.post("/", data={"item_text": "신규 작업 아이템"})
+
+        self.assertEqual(Item.objects.count(), 1)
+        new_item = Item.objects.first()
+        self.assertEqual(new_item.text, "신규 작업 아이템")
+
         self.assertContains(response, "신규 작업 아이템")
+        self.assertTemplateUsed(response, "lists/home.html")
 
 
 class ItemModelTesT(TestCase):
