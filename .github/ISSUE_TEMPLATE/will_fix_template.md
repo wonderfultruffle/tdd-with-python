@@ -7,7 +7,7 @@ assignees: ''
 
 ---
 
-## 개선 목적 & 이유 :dart:
+## 개선 목적 :dart:
 
 <br/>
 
