@@ -2,6 +2,8 @@ from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 import unittest
 
+import time
+
 class NewVisitorTesT(unittest.TestCase):
 
     def setUp(self):
@@ -29,6 +31,7 @@ class NewVisitorTesT(unittest.TestCase):
         
         # 엔터키를 치면 페이지가 갱신되고 작업 목록에 '1: 공작 깃털 사기' 아이템이 추가된다.
         input_box.send_keys(Keys.ENTER)
+        self.browser.implicitly_wait(2)
         
         table = self.browser.find_element(value="id_list_table")
         rows = table.find_elements("css selector", "tr")
