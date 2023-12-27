@@ -1,10 +1,11 @@
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
-import unittest
+
+from django.test import LiveServerTestCase
 
 import time
 
-class NewVisitorTesT(unittest.TestCase):
+class NewVisitorTesT(LiveServerTestCase):
 
     def setUp(self):
         self.browser = webdriver.Firefox()
@@ -20,7 +21,7 @@ class NewVisitorTesT(unittest.TestCase):
 
     def test_can_start_a_todo_list(self):
         # 사용자는 To-Do 웹 사이트에 방문한다.
-        self.browser.get("http://localhost:8000")
+        self.browser.get(self.live_server_url)
 
         # To-Do 웹 사이트의 타이틀 헤더엔 "To-Do" 가 포함 되어 있다.
         self.assertIn("To-Do", self.browser.title)
@@ -55,6 +56,3 @@ class NewVisitorTesT(unittest.TestCase):
         self.fail("Finish the test!")
 
         # 해당 URL에 접속하면 사용자가 만든 작업 목록이 그대로 있는 것을 확인할 수 있다.
-
-if __name__ == "__main__":
-    unittest.main(warnings="ignore")
