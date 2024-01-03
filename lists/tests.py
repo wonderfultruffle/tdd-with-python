@@ -40,9 +40,9 @@ class HomePageTest(TestCase):
 
     def test_home_page_redirects_after_POST(self):
         response = self.client.post('/', data={"item_text":"신규 작업 아이템"})
+
         # self.assertContains(response, "신규 작업 아이템")
         # self.assertTemplateUsed(response, "lists/home.html") # 'POST 요청을 처리한 후에는 반드시 Redirect 하라.' -> 아래 Code로 대체
-
         # self.assertEqual(response.status_code, 302)
         # self.assertEqual(response["location"], '/')
         self.assertRedirects(response, '/') # 위 두줄을 현재 줄로 대체.(Django 최신 버전 기능)
@@ -74,9 +74,11 @@ class ItemModelTesT(TestCase):
         second_item.save()
 
         saved_items = Item.objects.all()
+
         self.assertEqual(saved_items.count(), 2)
 
         first_saved_item = saved_items[0]
         second_saved_item = saved_items[1]
+
         self.assertEqual(first_saved_item.text, "첫 번째 아이템")
         self.assertEqual(second_saved_item.text, "두 번째 아이템")

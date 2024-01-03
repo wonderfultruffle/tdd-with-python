@@ -65,3 +65,55 @@ class NewVisitorTesT(LiveServerTestCase):
         self.fail("Finish the test!")
 
         # 해당 URL에 접속하면 사용자가 만든 작업 목록이 그대로 있는 것을 확인할 수 있다.
+
+    def test_multiple_users_can_starts_lists_at_different_urls(self):
+
+        # 에디스(첫 번째 사용자)가 to-do list를 생성하고 사용한다.
+
+        self.browser.get(self.live_server_url)
+
+        inputbox = self.browser.find_element("id", "id_new_item")
+        inputbox.send_keys("공작 깃털 사기")
+        inputbox.send_keys(Keys.ENTER)
+
+        self.wait_for_row_in_list_table("1: 공작 깃털 사기")
+
+        # 에디스의 to-do list가 고유의 URL을 갖는지 확인한다.
+        edith_list_url = self.browser.current_url
+        self.assertRegex(edith_list_url, "/lists/.+")
+
+
+        ## 새로운 사용자 세션을 위해 브라우저의 쿠키를 삭제
+        self.browser.delete_all_cookies()
+
+
+        # 새로운 사용자 프랜시스가 홈페이지에 방문한다.
+        self.browser.get(self.live_server_url)
+
+        # 이전 사용자인 에디스의 작업 목록이 나타나지 않는 것을 확인한다.
+        page_text = self.browser.find_element("tag name", "body").text
+        self.assertNotIn("공작 깃털 사기", page_text)
+        self.assertNotIn("공작 깃털을 이용해 그물 만들기", page_text)
+
+        # 프랜시스도 새로운 작업 목록을 생성하고 작업 Item을 추가한다.
+        inputbox = self.browser.find_element("id", "id_new_item")
+        inputbox.send_keys("우유 사기")
+        inputbox.send_keys(Keys.ENTER)
+
+        self.wait_for_row_in_list_table("1: 우유 사기")
+
+        # 프랜시스의 to-do list가 고유한 URL을 갖는지 확인한다.
+        francis_list_url = self.browser.current_url
+
+        self.assertRegex(francis_list_url, "/lists/.+")
+        self.assertNotEquals(francis_list_url, edith_list_url)
+
+        # 다시 프랜시스가 보고 있는 페이지에 에디스의 작업 목록이 없는 지 확인한다.
+        page_text = self.browser.find_element("tag name", "body").text
+        self.assertNotIn("공작 깃털 사기", page_text)
+        self.assertIn("우유 사기", page_text)
+
+
+
+
+
