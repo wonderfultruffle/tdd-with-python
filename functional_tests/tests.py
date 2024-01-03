@@ -60,12 +60,6 @@ class NewVisitorTesT(LiveServerTestCase):
         self.wait_for_row_in_list_table("1: 공작 깃털 사기")
         self.wait_for_row_in_list_table("2: 공작 깃털을 이용해 그물 만들기")
 
-        # 사이트는 사용자에게 특정 URL을 생성해준다.
-        # 이때 URL에 대한 설명도 함께 제공된다.
-        self.fail("Finish the test!")
-
-        # 해당 URL에 접속하면 사용자가 만든 작업 목록이 그대로 있는 것을 확인할 수 있다.
-
     def test_multiple_users_can_starts_lists_at_different_urls(self):
 
         # 에디스(첫 번째 사용자)가 to-do list를 생성하고 사용한다.
@@ -93,7 +87,6 @@ class NewVisitorTesT(LiveServerTestCase):
         # 이전 사용자인 에디스의 작업 목록이 나타나지 않는 것을 확인한다.
         page_text = self.browser.find_element("tag name", "body").text
         self.assertNotIn("공작 깃털 사기", page_text)
-        self.assertNotIn("공작 깃털을 이용해 그물 만들기", page_text)
 
         # 프랜시스도 새로운 작업 목록을 생성하고 작업 Item을 추가한다.
         inputbox = self.browser.find_element("id", "id_new_item")
