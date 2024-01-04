@@ -2,7 +2,7 @@ from django.test import TestCase
 from django.urls import resolve
 
 from lists.views import home_page
-from lists.models import Item
+from lists.models import Item, List
 
 # Create your tests here.
 class HomePageTest(TestCase):
@@ -61,29 +61,53 @@ class HomePageTest(TestCase):
     #     for item in Item.objects.all():
     #         self.assertContains(response, item.text)
 
-
-class ItemModelTest(TestCase):
+class ListItemModelTest(TestCase):
 
     def test_saving_and_retrieving_items(self):
+        mylist = List()
+        mylist.save()
+
         first_item = Item()
         first_item.text = "첫 번째 아이템"
+        first_item.list = mylist
         first_item.save()
 
         second_item = Item()
         second_item.text = "두 번째 아이템"
+        second_item.list = mylist
         second_item.save()
 
         saved_items = Item.objects.all()
-
         self.assertEqual(saved_items.count(), 2)
 
-        first_saved_item = saved_items[0]
-        second_saved_item = saved_items[1]
+        saved_list = List.objects.get()
+        self.assertEqual(saved_list, mylist)
 
+        first_saved_item = saved_items[0]
         self.assertEqual(first_saved_item.text, "첫 번째 아이템")
+        self.assertEqual(first_saved_item.list, mylist)
+
+        second_saved_item = saved_items[1]
         self.assertEqual(second_saved_item.text, "두 번째 아이템")
+        self.assertEqual(second_saved_item.list, mylist)
 
 class ListViewTest(TestCase):
+    def test_use_list_template(self):
+        response = self.client.get("/lists/the-only-list-in-the-world/")
+        self.assertTemplateUsed(response, "lists/list.html")
+
+    def test_displays_all_items(self):
+        mylist = List.objects.create()
+        Item.objects.create(text="신규 아이템 1", list=mylist)
+        Item.objects.create(text="신규 아이템 2", list=mylist)
+
+        response = self.client.get("/lists/the-only-list-in-the-world/")
+
+        self.assertContains(response, "신규 아이템 1")
+        self.assertContains(response, "신규 아이템 2")
+
+
+class NewListTest(TestCase):
 
     def test_can_save_a_POST_request(self):
         response = self.client.post("/lists/new", data={"item_text": "신규 작업 아이템"})
@@ -96,15 +120,3 @@ class ListViewTest(TestCase):
         response = self.client.post("/lists/new", data={"item_text": "신규 작업 아이템"})
         self.assertRedirects(response, "/lists/the-only-list-in-the-world/")
 
-    def test_use_list_template(self):
-        response = self.client.get("/lists/the-only-list-in-the-world/")
-        self.assertTemplateUsed(response, "lists/list.html")
-
-    def test_displays_all_items(self):
-        Item.objects.create(text="신규 아이템 1")
-        Item.objects.create(text="신규 아이템 2")
-
-        response = self.client.get("/lists/the-only-list-in-the-world/")
-
-        self.assertContains(response, "신규 아이템 1")
-        self.assertContains(response, "신규 아이템 2")
