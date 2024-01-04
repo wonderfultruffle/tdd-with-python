@@ -31,26 +31,26 @@ class HomePageTest(TestCase):
         response = self.client.get("/")
         self.assertTemplateUsed(response, "lists/home.html")
 
-    def test_home_page_can_save_a_POST_request(self):
-        response = self.client.post("/", data={"item_text": "신규 작업 아이템"})
+    # def test_home_page_can_save_a_POST_request(self):
+    #     response = self.client.post("/", data={"item_text": "신규 작업 아이템"})
+    #
+    #     self.assertEqual(Item.objects.count(), 1)
+    #     new_item = Item.objects.first()
+    #     self.assertEqual(new_item.text, "신규 작업 아이템")
 
-        self.assertEqual(Item.objects.count(), 1)
-        new_item = Item.objects.first()
-        self.assertEqual(new_item.text, "신규 작업 아이템")
+    # def test_home_page_redirects_after_POST(self):
+    #     response = self.client.post('/', data={"item_text":"신규 작업 아이템"})
+    #
+    #     # self.assertContains(response, "신규 작업 아이템")
+    #     # self.assertTemplateUsed(response, "lists/home.html") # 'POST 요청을 처리한 후에는 반드시 Redirect 하라.' -> 아래 Code로 대체
+    #     # self.assertEqual(response.status_code, 302)
+    #     # self.assertEqual(response["location"], '/')
+    #     self.assertRedirects(response, '/lists/the-only-list-in-the-world/') # 위 두줄을 현재 줄로 대체.(Django 최신 버전 기능)
 
-    def test_home_page_redirects_after_POST(self):
-        response = self.client.post('/', data={"item_text":"신규 작업 아이템"})
-
-        # self.assertContains(response, "신규 작업 아이템")
-        # self.assertTemplateUsed(response, "lists/home.html") # 'POST 요청을 처리한 후에는 반드시 Redirect 하라.' -> 아래 Code로 대체
-        # self.assertEqual(response.status_code, 302)
-        # self.assertEqual(response["location"], '/')
-        self.assertRedirects(response, '/lists/the-only-list-in-the-world/') # 위 두줄을 현재 줄로 대체.(Django 최신 버전 기능)
-
-    def test_home_page_only_saves_items_when_it_necessary(self):
-        response = self.client.get("/")
-
-        self.assertEqual(Item.objects.count(), 0)
+    # def test_home_page_only_saves_items_when_it_necessary(self):
+    #     response = self.client.get("/")
+    #
+    #     self.assertEqual(Item.objects.count(), 0)
 
     # def test_home_page_display_all_list_items(self): => ListViewTest의 test_display_all_items() 로 대체
     #     Item.objects.create(text="신규 작업 목록 1")
@@ -84,6 +84,21 @@ class ItemModelTest(TestCase):
         self.assertEqual(second_saved_item.text, "두 번째 아이템")
 
 class ListViewTest(TestCase):
+
+    def test_can_save_a_POST_request(self):
+        response = self.client.post("/lists/new", data={"item_text": "신규 작업 아이템"})
+        self.assertEqual(Item.objects.count(), 1)
+
+        new_item = Item.objects.first()
+        self.assertEqual(new_item.text, "신규 작업 아이템")
+
+    def test_redirect_after_POST(self):
+        response = self.client.post("/lists/new", data={"item_text": "신규 작업 아이템"})
+        self.assertRedirects(response, "/lists/the-only-list-in-the-world/")
+
+    def test_use_list_template(self):
+        response = self.client.get("/lists/the-only-list-in-the-world/")
+        self.assertTemplateUsed(response, "lists/list.html")
 
     def test_displays_all_items(self):
         Item.objects.create(text="신규 아이템 1")
