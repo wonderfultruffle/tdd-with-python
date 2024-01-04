@@ -5,8 +5,7 @@ from lists.models import Item
 
 # Create your views here.
 def home_page(request):
-    items = Item.objects.all()
-    return render(request, "lists/home.html", {"items": items})
+    return render(request, "lists/home.html")
 
 def view_list(request):
     items = Item.objects.all()
