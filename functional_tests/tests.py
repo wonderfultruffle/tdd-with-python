@@ -8,7 +8,7 @@ import time
 
 MAX_WAIT = 5
 
-class NewVisitorTesT(LiveServerTestCase):
+class NewVisitorTest(LiveServerTestCase):
 
     def setUp(self):
         self.browser = webdriver.Firefox()
@@ -99,7 +99,7 @@ class NewVisitorTesT(LiveServerTestCase):
         francis_list_url = self.browser.current_url
 
         self.assertRegex(francis_list_url, "/lists/.+")
-        self.assertNotEquals(francis_list_url, edith_list_url)
+        self.assertNotEqual(francis_list_url, edith_list_url)
 
         # 다시 프랜시스가 보고 있는 페이지에 에디스의 작업 목록이 없는 지 확인한다.
         page_text = self.browser.find_element("tag name", "body").text
