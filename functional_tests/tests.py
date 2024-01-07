@@ -107,6 +107,17 @@ class NewVisitorTest(LiveServerTestCase):
         self.assertIn("우유 사기", page_text)
 
 
+    def test_layout_and_styling(self):
+        # 에디스는 메인 페이지를 방문한다. 접속된 웹 브라우저의 크기는 1024 X768 이다.
+        self.browser.get(self.live_server_url)
+        self.browser.set_window_size(1024, 768)
 
+        # 그녀는 입력 상자가 가운데 배치된 것을 본다. (offset = 10px)
+        inputbox = self.browser.find_element("id", "id_new_item")
+        inputbox.send_keys("testings")
+        inputbox.send_keys(Keys.ENTER)
+        self.wait_for_row_in_list_table("1: testings")
 
+        inputbox = self.browser.find_element("id", "id_new_item")
+        self.assertAlmostEqual(inputbox.location['x'] + inputbox.size["width"]/2, 512, delta=10)
 
